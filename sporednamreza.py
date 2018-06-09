@@ -1,4 +1,6 @@
 from __future__ import print_function
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -6,8 +8,9 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+import matplotlib.pyplot as plt
 
-img_rows, img_cols = 100, 100
+img_rows, img_cols = 50, 50
 input_shape = (img_rows, img_cols, 1)
 num_classes = 2
 
@@ -23,7 +26,7 @@ train_generator = train_datagen.flow_from_directory(
         'data/letters and nonletters/train',
         target_size=(img_rows, img_cols),
 		color_mode='grayscale',
-        batch_size=15,
+        batch_size=120,
         class_mode='categorical',
 		shuffle='True')
 
@@ -31,7 +34,7 @@ validation_generator = val_datagen.flow_from_directory(
         'data/letters and nonletters/validation',
         target_size=(img_rows, img_cols),
 		color_mode='grayscale',
-        batch_size=15,
+        batch_size=120,
         class_mode='categorical',
 		shuffle='True')
 
@@ -52,18 +55,37 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
-model.fit_generator(
+history = model.fit_generator(
         train_generator,
-        steps_per_epoch=40,
-        epochs=10,
+        steps_per_epoch=120,
+        epochs=4,
 		verbose=1,
         validation_data=validation_generator,
         validation_steps=20)
 
 # serialize model to JSON
 model_json = model.to_json()
-with open("modelzasegmentaciju.json", "w") as json_file:
+with open("modelzasegmentaciju2.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights("modezasegmentaciju.h5")
+model.save_weights("modelzasegmentaciju2.h5")
 print("Saved model to disk")
+
+# list all data in history
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
