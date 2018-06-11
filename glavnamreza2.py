@@ -39,35 +39,35 @@ validation_generator = val_datagen.flow_from_directory(
 		shuffle='True')
 
 
-model = Sequential()
-    #C1 Layer
-    model.add(Convolution2D(32, filter_size, filter_size, border_mode='same', input_shape=(28,28,1)))
-    # The activation for layers is ReLU
-    model.add(Activation('relu'))
-    # Max pooling
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-    #Second Layer
-    model.add(Convolution2D(num_filters, filter_size, filter_size, border_mode='valid', input_shape=(14,14,1)))
-    model.add(Activation('relu'))
-    # Max pooling
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-    #Third Layer
-    model.add(Convolution2D(num_filters, filter_size, filter_size, border_mode='valid', input_shape=(5,5,1)))
-    #Flatten the CNN output
-    model.add(Flatten())
-    #Add Three dense Layer for the FNN 
-    
-    model.add(Dense(84))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-    #model.add(Dense(32))
-    #model.add(Activation('relu'))
-    #model.add(Dropout(0.2))
-    model.add(Dense(10))
-    # For classification, the activation is softmax
-    model.add(Activation('softmax'))
+	model = Sequential()
+	#C1 Layer
+	model.add(Convolution2D(32, filter_size, filter_size, border_mode='same', input_shape=(28,28,1)))
+	# The activation for layers is ReLU
+	model.add(Activation('relu'))
+	# Max pooling
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	model.add(Dropout(0.25))
+	#Second Layer
+	model.add(Convolution2D(num_filters, filter_size, filter_size, border_mode='valid', input_shape=(14,14,1)))
+	model.add(Activation('relu'))
+	# Max pooling
+	model.add(MaxPooling2D(pool_size=(2, 2)))
+	model.add(Dropout(0.25))
+	#Third Layer
+	model.add(Convolution2D(num_filters, filter_size, filter_size, border_mode='valid', input_shape=(5,5,1)))
+	#Flatten the CNN output
+	model.add(Flatten())
+	#Add Three dense Layer for the FNN 
+
+	model.add(Dense(84))
+	model.add(Activation('relu'))
+	model.add(Dropout(0.5))
+	#model.add(Dense(32))
+	#model.add(Activation('relu'))
+	#model.add(Dropout(0.2))
+	model.add(Dense(10))
+	# For classification, the activation is softmax
+	model.add(Activation('softmax'))
 
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
